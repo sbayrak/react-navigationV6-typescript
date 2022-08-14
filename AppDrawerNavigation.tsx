@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import {
   NavigationContainer,
   NavigatorScreenParams,
@@ -10,9 +11,7 @@ import ExploreIcon from './icons/ExploreIcon';
 import ProfileIcon from './icons/ProfileIcon';
 import RestaurantsIcon from './icons/RestaurantsIcon';
 import ExploreScreen from './screens/ExploreScreen';
-import Login from './screens/Login';
 import ProfileScreen from './screens/ProfileScreen';
-import Register from './screens/Register';
 import RestaurantScreen from './screens/RestaurantScreen';
 import RestaurantsScreen from './screens/RestaurantsScreen';
 
@@ -21,11 +20,10 @@ export type RootStackParamList = {
   RestaurantsStack: NavigatorScreenParams<RestaurantsStackParams>;
   ExploreStack: NavigatorScreenParams<ExploreStackParams>;
   RestaurantScreen: { name: string };
-  AuthStack: AuthStackParams;
 };
 
 // const RootStack = createNativeStackNavigator<RootStackParamList>();
-const RootBottomTab = createBottomTabNavigator<RootStackParamList>();
+const RootBottomTab = createDrawerNavigator<RootStackParamList>();
 
 export type RestaurantsStackParams = {
   RestaurantsScreen: undefined;
@@ -66,72 +64,47 @@ const ExploreScreenStack = () => {
   );
 };
 
-export type AuthStackParams = {
-  Login: undefined;
-  Register: undefined;
-};
-const AuthStack = createNativeStackNavigator<AuthStackParams>();
-const AuthStackScreen = () => {
-  return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen name='Login' component={Login} />
-      <AuthStack.Screen name='Register' component={Register} />
-    </AuthStack.Navigator>
-  );
-};
-
 export default function App() {
-  const renderContent = () => {
-    const isLoggedIn = false;
-
-    if (isLoggedIn) {
-      return (
-        <RootBottomTab.Navigator
-          screenOptions={{
-            tabBarActiveTintColor: '#e67a15',
-            tabBarInactiveTintColor: 'gray',
-            headerShown: false,
-          }}
-        >
-          <RootBottomTab.Screen
-            name='RestaurantsStack'
-            component={RestaurantsScreenStack}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <RestaurantsIcon color={color} size={size} />
-              ),
-              tabBarLabel: 'Restaurants',
-            }}
-          />
-          <RootBottomTab.Screen
-            name='ExploreStack'
-            component={ExploreScreenStack}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <ExploreIcon color={color} size={size} />
-              ),
-              tabBarLabel: 'Explore',
-            }}
-          />
-          <RootBottomTab.Screen
-            name='ProfileScreen'
-            component={ProfileScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <ProfileIcon color={color} size={size} />
-              ),
-              tabBarLabel: 'Profile',
-            }}
-          />
-        </RootBottomTab.Navigator>
-      );
-    }
-    return <AuthStackScreen />;
-  };
-
   return (
     <NavigationContainer>
-      {renderContent()}
+      <RootBottomTab.Navigator
+        screenOptions={{
+          drawerActiveTintColor: '#e67a15',
+          drawerInactiveTintColor: 'gray',
+          headerShown: false,
+        }}
+      >
+        <RootBottomTab.Screen
+          name='RestaurantsStack'
+          component={RestaurantsScreenStack}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <RestaurantsIcon color={color} size={size} />
+            ),
+            drawerLabel: 'Restaurants',
+          }}
+        />
+        <RootBottomTab.Screen
+          name='ExploreStack'
+          component={ExploreScreenStack}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <ExploreIcon color={color} size={size} />
+            ),
+            drawerLabel: 'Explore',
+          }}
+        />
+        <RootBottomTab.Screen
+          name='ProfileScreen'
+          component={ProfileScreen}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <ProfileIcon color={color} size={size} />
+            ),
+            drawerLabel: 'Profile',
+          }}
+        />
+      </RootBottomTab.Navigator>
       {/* <RootStack.Navigator>
         <RootStack.Screen
           name='RestaurantsScreen'
@@ -144,6 +117,7 @@ export default function App() {
           component={RestaurantScreen}
         />
       </RootStack.Navigator> */}
+
       <StatusBar style='auto' />
     </NavigationContainer>
   );
